@@ -53,7 +53,7 @@ class WorkoutScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AddSetScreen()),
+                  MaterialPageRoute(builder: (context) => const AddSetScreen()),
                 );
               },
               style: ElevatedButton.styleFrom(
