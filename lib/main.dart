@@ -3,10 +3,10 @@ import 'package:magic_fitness/src/routes.dart';
 import 'package:magic_fitness/src/screens/workout_list_screen.dart';
 import 'package:magic_fitness/src/screens/workout_screen.dart';
 
-void main() => runApp(const MagicAIFitnessApp());
+void main() => runApp(const MagicFitnessApp());
 
-class MagicAIFitnessApp extends StatelessWidget {
-  const MagicAIFitnessApp({super.key});
+class MagicFitnessApp extends StatelessWidget {
+  const MagicFitnessApp({super.key});
 
   @override
   Widget build(BuildContext context) {
