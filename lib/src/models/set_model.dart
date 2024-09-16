@@ -1,3 +1,6 @@
+import 'package:isar/isar.dart';
+
+@embedded
 class SetModel {
   final String exercise;
   final double weight;
