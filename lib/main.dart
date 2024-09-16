@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:magic_fitness/src/routes.dart';
 import 'package:magic_fitness/src/screens/workout_list_screen.dart';
 import 'package:magic_fitness/src/screens/workout_screen.dart';
 
@@ -14,10 +15,10 @@ class MagicAIFitnessApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/',
+      initialRoute: AppRoutes.workouts,
       routes: {
-        '/workouts': (context) => const WorkoutListScreen(),
-        '/workout/details': (context) => const WorkoutScreen(),
+        AppRoutes.workouts: (context) => const WorkoutListScreen(),
+        AppRoutes.workoutDetails: (context) => const WorkoutScreen(),
       },
     );
   }
