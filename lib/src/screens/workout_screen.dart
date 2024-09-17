@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:magic_fitness/src/routes.dart';
 import 'package:magic_fitness/src/screens/add_set_screen.dart';
 
 class WorkoutScreen extends StatelessWidget {
@@ -51,10 +52,7 @@ class WorkoutScreen extends StatelessWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AddSetScreen()),
-                );
+                Navigator.pushNamed(context, AppRoutes.addSet);
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:magic_fitness/src/routes.dart';
+import 'package:magic_fitness/src/screens/add_set_screen.dart';
 import 'package:magic_fitness/src/screens/workout_list_screen.dart';
 import 'package:magic_fitness/src/screens/workout_screen.dart';
 
@@ -19,6 +20,7 @@ class MagicFitnessApp extends StatelessWidget {
       routes: {
         AppRoutes.workouts: (context) => const WorkoutListScreen(),
         AppRoutes.workoutDetails: (context) => const WorkoutScreen(),
+        AppRoutes.addSet: (context) => const AddSetScreen(),
       },
     );
   }
