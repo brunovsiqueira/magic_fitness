@@ -1,8 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:magic_fitness/src/helpers/validator_helpers.dart';
 import 'package:magic_fitness/src/models/set_model.dart';
 
-class AddSetScreen extends StatelessWidget {
+class AddSetScreen extends StatefulWidget {
   const AddSetScreen({super.key});
+
+  @override
+  State<AddSetScreen> createState() => _AddSetScreenState();
+}
+
+class _AddSetScreenState extends State<AddSetScreen> {
+  final _formKey = GlobalKey<FormState>();
+
+  Exercise? _selectedExercise;
+  final _weightController = TextEditingController();
+  final _repetitionsController = TextEditingController();
+
+  @override
+  void dispose() {
+    _weightController.dispose();
+    _repetitionsController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,64 +35,87 @@ class AddSetScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Exercise',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            DropdownButtonFormField<String>(
-              items: Exercise.values.map((exercise) {
-                return DropdownMenuItem<String>(
-                  value: exercise.name,
-                  child: Text(exercise.name),
-                );
-              }).toList(),
-              onChanged: (String? selectedValue) {
-                if (selectedValue != null) {
-                  Exercise selectedExercise =
-                      Exercise.values.byName(selectedValue);
-                }
-              },
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Exercise',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              DropdownButtonFormField<Exercise>(
+                value: _selectedExercise,
+                items: Exercise.values.map((exercise) {
+                  return DropdownMenuItem<Exercise>(
+                    value: exercise,
+                    child: Text(exercise.name),
+                  );
+                }).toList(),
+                onChanged: (Exercise? selectedValue) {
+                  setState(() {
+                    _selectedExercise = selectedValue;
+                  });
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return 'Please select an exercise';
+                  }
+                  return null;
+                },
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            const Text('Weight (kg)',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            TextFormField(
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter weight',
+              const SizedBox(height: 16),
+              const Text('Weight (kg)',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextFormField(
+                controller: _weightController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Enter weight',
+                ),
+                textInputAction: TextInputAction.next,
+                validator: ValidationHelpers.validatePositiveDouble,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
-              textInputAction: TextInputAction.next,
-            ),
-            const SizedBox(height: 16),
-            const Text('Repetitions',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            TextFormField(
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter reps',
+              const SizedBox(height: 16),
+              const Text('Repetitions',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextFormField(
+                controller: _repetitionsController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Enter reps',
+                ),
+                textInputAction: TextInputAction.done,
+                validator: ValidationHelpers.validatePositiveInteger,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
-              textInputAction: TextInputAction.done,
-            ),
-            const Spacer(),
-            ElevatedButton(
-              onPressed: () {
-                // Add set logic here
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                minimumSize: const Size(double.infinity, 50),
+              const Spacer(),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    final newSet = SetModel(
+                      exercise: _selectedExercise!,
+                      weight: double.parse(_weightController.text),
+                      repetitions: int.parse(_repetitionsController.text),
+                    );
+
+                    Navigator.pop(context, newSet);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  minimumSize: const Size(double.infinity, 50),
+                ),
+                child: const Text('Add Set'),
               ),
-              child: const Text('Add Set'),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

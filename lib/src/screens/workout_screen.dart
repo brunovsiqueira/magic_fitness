@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:magic_fitness/src/routes.dart';
-import 'package:magic_fitness/src/screens/add_set_screen.dart';
 
 class WorkoutScreen extends StatelessWidget {
   const WorkoutScreen({super.key});
