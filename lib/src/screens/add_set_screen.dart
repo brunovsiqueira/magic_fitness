@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:magic_fitness/src/models/set_model.dart';
 
 class AddSetScreen extends StatelessWidget {
   const AddSetScreen({super.key});
@@ -21,19 +22,18 @@ class AddSetScreen extends StatelessWidget {
             const Text('Exercise',
                 style: TextStyle(fontWeight: FontWeight.bold)),
             DropdownButtonFormField<String>(
-              items: [
-                'Barbell row',
-                'Bench press',
-                'Shoulder press',
-                'Deadlift',
-                'Squat'
-              ].map((String value) {
+              items: Exercise.values.map((exercise) {
                 return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
+                  value: exercise.name,
+                  child: Text(exercise.name),
                 );
               }).toList(),
-              onChanged: (_) {},
+              onChanged: (String? selectedValue) {
+                if (selectedValue != null) {
+                  Exercise selectedExercise =
+                      Exercise.values.byName(selectedValue);
+                }
+              },
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 contentPadding:
@@ -49,6 +49,7 @@ class AddSetScreen extends StatelessWidget {
                 border: OutlineInputBorder(),
                 hintText: 'Enter weight',
               ),
+              textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 16),
             const Text('Repetitions',
@@ -59,6 +60,7 @@ class AddSetScreen extends StatelessWidget {
                 border: OutlineInputBorder(),
                 hintText: 'Enter reps',
               ),
+              textInputAction: TextInputAction.done,
             ),
             const Spacer(),
             ElevatedButton(
