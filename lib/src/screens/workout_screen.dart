@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:magic_fitness/src/models/set_model.dart';
+import 'package:magic_fitness/src/models/workout_model.dart';
 import 'package:magic_fitness/src/routes.dart';
 
 class WorkoutScreen extends StatelessWidget {
-  const WorkoutScreen({super.key});
+  WorkoutScreen({super.key, required this.workout});
+
+  final WorkoutModel workout;
+
+  List<SetModel> setList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +26,9 @@ class WorkoutScreen extends StatelessWidget {
           children: [
             Expanded(
               child: ListView.builder(
-                itemCount: 3, // Example count
+                itemCount: workout.sets.length,
                 itemBuilder: (context, index) {
+                  final set = workout.sets[index];
                   return Card(
                     margin: const EdgeInsets.only(bottom: 16),
                     child: Padding(
@@ -50,8 +57,11 @@ class WorkoutScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.addSet);
+              onPressed: () async {
+                final SetModel? newSet =
+                    await Navigator.pushNamed(context, AppRoutes.addSet)
+                        as SetModel?;
+                if (newSet != null) {}
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),

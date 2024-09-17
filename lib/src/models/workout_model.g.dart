@@ -21,6 +21,12 @@ const WorkoutModelSchema = CollectionSchema(
       id: 0,
       name: r'date',
       type: IsarType.dateTime,
+    ),
+    r'sets': PropertySchema(
+      id: 1,
+      name: r'sets',
+      type: IsarType.objectList,
+      target: r'SetModel',
     )
   },
   estimateSize: _workoutModelEstimateSize,
@@ -29,15 +35,8 @@ const WorkoutModelSchema = CollectionSchema(
   deserializeProp: _workoutModelDeserializeProp,
   idName: r'id',
   indexes: {},
-  links: {
-    r'sets': LinkSchema(
-      id: 5498423848116338215,
-      name: r'sets',
-      target: r'SetModel',
-      single: false,
-    )
-  },
-  embeddedSchemas: {},
+  links: {},
+  embeddedSchemas: {r'SetModel': SetModelSchema},
   getId: _workoutModelGetId,
   getLinks: _workoutModelGetLinks,
   attach: _workoutModelAttach,
@@ -50,6 +49,14 @@ int _workoutModelEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.sets.length * 3;
+  {
+    final offsets = allOffsets[SetModel]!;
+    for (var i = 0; i < object.sets.length; i++) {
+      final value = object.sets[i];
+      bytesCount += SetModelSchema.estimateSize(value, offsets, allOffsets);
+    }
+  }
   return bytesCount;
 }
 
@@ -60,6 +67,12 @@ void _workoutModelSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeDateTime(offsets[0], object.date);
+  writer.writeObjectList<SetModel>(
+    offsets[1],
+    allOffsets,
+    SetModelSchema.serialize,
+    object.sets,
+  );
 }
 
 WorkoutModel _workoutModelDeserialize(
@@ -70,6 +83,13 @@ WorkoutModel _workoutModelDeserialize(
 ) {
   final object = WorkoutModel(
     date: reader.readDateTime(offsets[0]),
+    sets: reader.readObjectList<SetModel>(
+          offsets[1],
+          SetModelSchema.deserialize,
+          allOffsets,
+          SetModel(),
+        ) ??
+        [],
   );
   return object;
 }
@@ -83,6 +103,14 @@ P _workoutModelDeserializeProp<P>(
   switch (propertyId) {
     case 0:
       return (reader.readDateTime(offset)) as P;
+    case 1:
+      return (reader.readObjectList<SetModel>(
+            offset,
+            SetModelSchema.deserialize,
+            allOffsets,
+            SetModel(),
+          ) ??
+          []) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -93,13 +121,11 @@ Id _workoutModelGetId(WorkoutModel object) {
 }
 
 List<IsarLinkBase<dynamic>> _workoutModelGetLinks(WorkoutModel object) {
-  return [object.sets];
+  return [];
 }
 
 void _workoutModelAttach(
-    IsarCollection<dynamic> col, Id id, WorkoutModel object) {
-  object.sets.attach(col, col.isar.collection<SetModel>(), r'sets', id);
-}
+    IsarCollection<dynamic> col, Id id, WorkoutModel object) {}
 
 extension WorkoutModelQueryWhereSort
     on QueryBuilder<WorkoutModel, WorkoutModel, QWhere> {
@@ -288,38 +314,43 @@ extension WorkoutModelQueryFilter
       ));
     });
   }
-}
-
-extension WorkoutModelQueryObject
-    on QueryBuilder<WorkoutModel, WorkoutModel, QFilterCondition> {}
-
-extension WorkoutModelQueryLinks
-    on QueryBuilder<WorkoutModel, WorkoutModel, QFilterCondition> {
-  QueryBuilder<WorkoutModel, WorkoutModel, QAfterFilterCondition> sets(
-      FilterQuery<SetModel> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'sets');
-    });
-  }
 
   QueryBuilder<WorkoutModel, WorkoutModel, QAfterFilterCondition>
       setsLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'sets', length, true, length, true);
+      return query.listLength(
+        r'sets',
+        length,
+        true,
+        length,
+        true,
+      );
     });
   }
 
   QueryBuilder<WorkoutModel, WorkoutModel, QAfterFilterCondition>
       setsIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'sets', 0, true, 0, true);
+      return query.listLength(
+        r'sets',
+        0,
+        true,
+        0,
+        true,
+      );
     });
   }
 
   QueryBuilder<WorkoutModel, WorkoutModel, QAfterFilterCondition>
       setsIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'sets', 0, false, 999999, true);
+      return query.listLength(
+        r'sets',
+        0,
+        false,
+        999999,
+        true,
+      );
     });
   }
 
@@ -329,7 +360,13 @@ extension WorkoutModelQueryLinks
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'sets', 0, true, length, include);
+      return query.listLength(
+        r'sets',
+        0,
+        true,
+        length,
+        include,
+      );
     });
   }
 
@@ -339,7 +376,13 @@ extension WorkoutModelQueryLinks
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'sets', length, include, 999999, true);
+      return query.listLength(
+        r'sets',
+        length,
+        include,
+        999999,
+        true,
+      );
     });
   }
 
@@ -351,11 +394,29 @@ extension WorkoutModelQueryLinks
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(
-          r'sets', lower, includeLower, upper, includeUpper);
+      return query.listLength(
+        r'sets',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
     });
   }
 }
+
+extension WorkoutModelQueryObject
+    on QueryBuilder<WorkoutModel, WorkoutModel, QFilterCondition> {
+  QueryBuilder<WorkoutModel, WorkoutModel, QAfterFilterCondition> setsElement(
+      FilterQuery<SetModel> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'sets');
+    });
+  }
+}
+
+extension WorkoutModelQueryLinks
+    on QueryBuilder<WorkoutModel, WorkoutModel, QFilterCondition> {}
 
 extension WorkoutModelQuerySortBy
     on QueryBuilder<WorkoutModel, WorkoutModel, QSortBy> {
@@ -419,6 +480,12 @@ extension WorkoutModelQueryProperty
   QueryBuilder<WorkoutModel, DateTime, QQueryOperations> dateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'date');
+    });
+  }
+
+  QueryBuilder<WorkoutModel, List<SetModel>, QQueryOperations> setsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'sets');
     });
   }
 }

@@ -2,6 +2,20 @@ import 'package:isar/isar.dart';
 
 part 'set_model.g.dart';
 
+@embedded
+class SetModel {
+  final String? exerciseName;
+  final int? weight;
+  final int? reps;
+
+  // Constructor without required parameters
+  SetModel({
+    this.exerciseName,
+    this.weight,
+    this.reps,
+  });
+}
+
 enum Exercise {
   barbellRow(name: 'Barbell row'),
   benchPress(name: 'Bench press'),
@@ -11,18 +25,4 @@ enum Exercise {
 
   const Exercise({required this.name});
   final String name;
-}
-
-@collection
-class SetModel {
-  final Id id = Isar.autoIncrement;
-  final Exercise exercise;
-  final double weight;
-  final int repetitions;
-
-  SetModel({
-    required this.exercise,
-    required this.weight,
-    required this.repetitions,
-  });
 }
