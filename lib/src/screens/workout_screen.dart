@@ -13,13 +13,17 @@ class WorkoutScreen extends StatefulWidget {
 }
 
 class _WorkoutScreenState extends State<WorkoutScreen> {
-  late final WorkoutModel? workout;
+  late final WorkoutModel workout;
 
   @override
   void initState() {
     super.initState();
 
-    final workout = ModalRoute.of(context)!.settings.arguments as WorkoutModel?;
+    workout = ModalRoute.of(context)!.settings.arguments as WorkoutModel? ??
+        WorkoutModel(
+          date: DateTime.now().toUtc(),
+          setList: [],
+        );
   }
 
   @override
@@ -38,32 +42,11 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           children: [
             Expanded(
               child: ListView.builder(
-                itemCount: workout?.setList.length ?? 0,
+                itemCount: workout.setList.length,
                 itemBuilder: (context, index) {
-                  final SetModel set = workout!.setList[index];
-                  return Card(
-                    margin: const EdgeInsets.only(bottom: 16),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Set ${index + 1}',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 8),
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Bench press'),
-                              Text('50 kg • 8 reps'),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                  final SetModel set = workout.setList[index];
+
+                  return SetCardWidget(index: index, set: set);
                 },
               ),
             ),
@@ -74,7 +57,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                     await Navigator.pushNamed(context, AppRoutes.addSet)
                         as SetModel?;
                 if (newSet != null) {
-                  // WorkoutModel.set
+                  workout.setList.add(newSet);
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -85,13 +68,47 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                // Save workout logic here
+                Navigator.pop(context, workout);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 minimumSize: const Size(double.infinity, 50),
               ),
               child: const Text('Save Workout'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SetCardWidget extends StatelessWidget {
+  const SetCardWidget({super.key, required this.index, required this.set});
+
+  final int index;
+  final SetModel set;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Set ${index + 1}',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(set.exercise.name),
+                Text('${set.weight} kg • ${set.repetitions} reps'),
+              ],
             ),
           ],
         ),
