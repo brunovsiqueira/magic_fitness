@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:magic_fitness/src/routes.dart';
 import 'package:magic_fitness/src/screens/workout_screen.dart';
 
 class WorkoutListScreen extends StatelessWidget {
@@ -27,11 +28,7 @@ class WorkoutListScreen extends StatelessWidget {
                       subtitle: Text('5 sets • Sept ${10 + index}, 2024'),
                       trailing: const Icon(Icons.bar_chart, color: Colors.blue),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const WorkoutScreen()),
-                        );
+                        //Navigator.pushNamed(context, AppRoutes.workoutDetails, arguments: );
                       },
                     ),
                   );
@@ -43,10 +40,10 @@ class WorkoutListScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const WorkoutScreen()),
-          );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => const WorkoutScreen()),
+          // );
         },
         label: const Text('New Workout'),
         icon: const Icon(Icons.add),

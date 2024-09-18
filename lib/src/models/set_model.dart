@@ -4,13 +4,14 @@ part 'set_model.g.dart';
 
 @embedded
 class SetModel {
-  final Exercise? exercise;
+  @enumerated
+  final Exercise exercise;
   final double? weight;
   final int? repetitions;
 
   // Constructor without required parameters required by isar
   SetModel({
-    this.exercise,
+    this.exercise = Exercise.squat,
     this.weight,
     this.repetitions,
   });

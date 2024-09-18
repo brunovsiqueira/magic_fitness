@@ -19,7 +19,7 @@ class MagicFitnessApp extends StatelessWidget {
       initialRoute: AppRoutes.workouts,
       routes: {
         AppRoutes.workouts: (context) => const WorkoutListScreen(),
-        AppRoutes.workoutDetails: (context) => const WorkoutScreen(),
+        AppRoutes.workoutDetails: (context) => WorkoutScreen(),
         AppRoutes.addSet: (context) => const AddSetScreen(),
       },
     );

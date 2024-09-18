@@ -1,14 +1,26 @@
+// ignore_for_file: prefer_const_constructors_in_immutables
+
 import 'package:flutter/material.dart';
 import 'package:magic_fitness/src/models/set_model.dart';
 import 'package:magic_fitness/src/models/workout_model.dart';
 import 'package:magic_fitness/src/routes.dart';
 
-class WorkoutScreen extends StatelessWidget {
-  WorkoutScreen({super.key, required this.workout});
+class WorkoutScreen extends StatefulWidget {
+  WorkoutScreen({super.key});
 
-  final WorkoutModel workout;
+  @override
+  State<WorkoutScreen> createState() => _WorkoutScreenState();
+}
 
-  List<SetModel> setList = [];
+class _WorkoutScreenState extends State<WorkoutScreen> {
+  late final WorkoutModel? workout;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final workout = ModalRoute.of(context)!.settings.arguments as WorkoutModel?;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +38,9 @@ class WorkoutScreen extends StatelessWidget {
           children: [
             Expanded(
               child: ListView.builder(
-                itemCount: workout.sets.length,
+                itemCount: workout?.setList.length ?? 0,
                 itemBuilder: (context, index) {
-                  final set = workout.sets[index];
+                  final SetModel set = workout!.setList[index];
                   return Card(
                     margin: const EdgeInsets.only(bottom: 16),
                     child: Padding(
@@ -61,7 +73,9 @@ class WorkoutScreen extends StatelessWidget {
                 final SetModel? newSet =
                     await Navigator.pushNamed(context, AppRoutes.addSet)
                         as SetModel?;
-                if (newSet != null) {}
+                if (newSet != null) {
+                  // WorkoutModel.set
+                }
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),

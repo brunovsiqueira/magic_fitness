@@ -22,9 +22,9 @@ const WorkoutModelSchema = CollectionSchema(
       name: r'date',
       type: IsarType.dateTime,
     ),
-    r'sets': PropertySchema(
+    r'setList': PropertySchema(
       id: 1,
-      name: r'sets',
+      name: r'setList',
       type: IsarType.objectList,
       target: r'SetModel',
     )
@@ -49,11 +49,11 @@ int _workoutModelEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.sets.length * 3;
+  bytesCount += 3 + object.setList.length * 3;
   {
     final offsets = allOffsets[SetModel]!;
-    for (var i = 0; i < object.sets.length; i++) {
-      final value = object.sets[i];
+    for (var i = 0; i < object.setList.length; i++) {
+      final value = object.setList[i];
       bytesCount += SetModelSchema.estimateSize(value, offsets, allOffsets);
     }
   }
@@ -71,7 +71,7 @@ void _workoutModelSerialize(
     offsets[1],
     allOffsets,
     SetModelSchema.serialize,
-    object.sets,
+    object.setList,
   );
 }
 
@@ -83,7 +83,7 @@ WorkoutModel _workoutModelDeserialize(
 ) {
   final object = WorkoutModel(
     date: reader.readDateTime(offsets[0]),
-    sets: reader.readObjectList<SetModel>(
+    setList: reader.readObjectList<SetModel>(
           offsets[1],
           SetModelSchema.deserialize,
           allOffsets,
@@ -316,10 +316,10 @@ extension WorkoutModelQueryFilter
   }
 
   QueryBuilder<WorkoutModel, WorkoutModel, QAfterFilterCondition>
-      setsLengthEqualTo(int length) {
+      setListLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
-        r'sets',
+        r'setList',
         length,
         true,
         length,
@@ -329,10 +329,10 @@ extension WorkoutModelQueryFilter
   }
 
   QueryBuilder<WorkoutModel, WorkoutModel, QAfterFilterCondition>
-      setsIsEmpty() {
+      setListIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
-        r'sets',
+        r'setList',
         0,
         true,
         0,
@@ -342,10 +342,10 @@ extension WorkoutModelQueryFilter
   }
 
   QueryBuilder<WorkoutModel, WorkoutModel, QAfterFilterCondition>
-      setsIsNotEmpty() {
+      setListIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
-        r'sets',
+        r'setList',
         0,
         false,
         999999,
@@ -355,13 +355,13 @@ extension WorkoutModelQueryFilter
   }
 
   QueryBuilder<WorkoutModel, WorkoutModel, QAfterFilterCondition>
-      setsLengthLessThan(
+      setListLengthLessThan(
     int length, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
-        r'sets',
+        r'setList',
         0,
         true,
         length,
@@ -371,13 +371,13 @@ extension WorkoutModelQueryFilter
   }
 
   QueryBuilder<WorkoutModel, WorkoutModel, QAfterFilterCondition>
-      setsLengthGreaterThan(
+      setListLengthGreaterThan(
     int length, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
-        r'sets',
+        r'setList',
         length,
         include,
         999999,
@@ -387,7 +387,7 @@ extension WorkoutModelQueryFilter
   }
 
   QueryBuilder<WorkoutModel, WorkoutModel, QAfterFilterCondition>
-      setsLengthBetween(
+      setListLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -395,7 +395,7 @@ extension WorkoutModelQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
-        r'sets',
+        r'setList',
         lower,
         includeLower,
         upper,
@@ -407,10 +407,10 @@ extension WorkoutModelQueryFilter
 
 extension WorkoutModelQueryObject
     on QueryBuilder<WorkoutModel, WorkoutModel, QFilterCondition> {
-  QueryBuilder<WorkoutModel, WorkoutModel, QAfterFilterCondition> setsElement(
-      FilterQuery<SetModel> q) {
+  QueryBuilder<WorkoutModel, WorkoutModel, QAfterFilterCondition>
+      setListElement(FilterQuery<SetModel> q) {
     return QueryBuilder.apply(this, (query) {
-      return query.object(q, r'sets');
+      return query.object(q, r'setList');
     });
   }
 }
@@ -483,9 +483,10 @@ extension WorkoutModelQueryProperty
     });
   }
 
-  QueryBuilder<WorkoutModel, List<SetModel>, QQueryOperations> setsProperty() {
+  QueryBuilder<WorkoutModel, List<SetModel>, QQueryOperations>
+      setListProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'sets');
+      return query.addPropertyName(r'setList');
     });
   }
 }
