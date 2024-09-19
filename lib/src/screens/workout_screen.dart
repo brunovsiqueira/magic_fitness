@@ -16,14 +16,13 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   late final WorkoutModel workout;
 
   @override
-  void initState() {
-    super.initState();
-
+  void didChangeDependencies() {
     workout = ModalRoute.of(context)!.settings.arguments as WorkoutModel? ??
         WorkoutModel(
           date: DateTime.now().toUtc(),
           setList: [],
         );
+    super.didChangeDependencies();
   }
 
   @override

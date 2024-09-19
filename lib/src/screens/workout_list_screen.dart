@@ -8,11 +8,10 @@ import 'package:magic_fitness/src/routes.dart';
 class WorkoutListScreen extends HookWidget {
   final WorkoutsDatasource workoutsDatasource;
 
-  WorkoutListScreen({required this.workoutsDatasource});
+  const WorkoutListScreen({super.key, required this.workoutsDatasource});
 
   @override
   Widget build(BuildContext context) {
-    // Using the custom hook
     final workoutsData = useWorkouts(workoutsDatasource);
 
     return Scaffold(
