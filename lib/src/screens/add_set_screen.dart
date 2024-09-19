@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:magic_fitness/src/helpers/validator_helpers.dart';
 import 'package:magic_fitness/src/models/set_model.dart';
+import 'package:magic_fitness/src/widgets/add_set_button.dart';
 
 class AddSetScreen extends StatefulWidget {
   const AddSetScreen({super.key});
@@ -114,6 +115,19 @@ class _AddSetScreenState extends State<AddSetScreen> {
                 ),
                 child: const Text('Add Set'),
               ),
+              AddSetButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    final newSet = SetModel(
+                      exercise: _selectedExercise!,
+                      weight: double.parse(_weightController.text),
+                      repetitions: int.parse(_repetitionsController.text),
+                    );
+
+                    Navigator.pop(context, newSet);
+                  }
+                },
+              )
             ],
           ),
         ),

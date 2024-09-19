@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:magic_fitness/src/models/set_model.dart';
 import 'package:magic_fitness/src/models/workout_model.dart';
 import 'package:magic_fitness/src/routes.dart';
+import 'package:magic_fitness/src/widgets/add_set_button.dart';
 
 class WorkoutDetailsScreen extends StatefulWidget {
   final WorkoutModel workout;
@@ -41,7 +42,7 @@ class _WorkoutDetailsScreenState extends State<WorkoutDetailsScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
+            AddSetButton(
               onPressed: () async {
                 final SetModel? newSet =
                     await Navigator.pushNamed(context, AppRoutes.addSet)
@@ -50,13 +51,6 @@ class _WorkoutDetailsScreenState extends State<WorkoutDetailsScreen> {
                   workout.setList.add(newSet);
                 }
               },
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
-              ),
-              child: const Text(
-                'Add Set',
-                style: TextStyle(color: Colors.black),
-              ),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
