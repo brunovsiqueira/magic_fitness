@@ -62,7 +62,10 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),
               ),
-              child: const Text('Add Set'),
+              child: const Text(
+                'Add Set',
+                style: TextStyle(color: Colors.black),
+              ),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
@@ -73,7 +76,10 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                 backgroundColor: Colors.blue,
                 minimumSize: const Size(double.infinity, 50),
               ),
-              child: const Text('Save Workout'),
+              child: const Text(
+                'Save Workout',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),
