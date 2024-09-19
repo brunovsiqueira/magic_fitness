@@ -5,16 +5,16 @@ import 'package:magic_fitness/src/models/set_model.dart';
 import 'package:magic_fitness/src/models/workout_model.dart';
 import 'package:magic_fitness/src/routes.dart';
 
-class WorkoutScreen extends StatefulWidget {
+class WorkoutDetailsScreen extends StatefulWidget {
   final WorkoutModel workout;
 
-  WorkoutScreen({super.key, required this.workout});
+  WorkoutDetailsScreen({super.key, required this.workout});
 
   @override
-  State<WorkoutScreen> createState() => _WorkoutScreenState();
+  State<WorkoutDetailsScreen> createState() => _WorkoutDetailsScreenState();
 }
 
-class _WorkoutScreenState extends State<WorkoutScreen> {
+class _WorkoutDetailsScreenState extends State<WorkoutDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final WorkoutModel workout = widget.workout;

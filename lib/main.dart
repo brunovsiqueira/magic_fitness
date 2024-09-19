@@ -6,7 +6,7 @@ import 'package:magic_fitness/src/models/workout_model.dart';
 import 'package:magic_fitness/src/routes.dart';
 import 'package:magic_fitness/src/screens/add_set_screen.dart';
 import 'package:magic_fitness/src/screens/workout_list_screen.dart';
-import 'package:magic_fitness/src/screens/workout_screen.dart';
+import 'package:magic_fitness/src/screens/workout_details_screen.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() async {
@@ -57,7 +57,7 @@ class MagicFitnessApp extends StatelessWidget {
                   );
           return MaterialPageRoute(
             builder: (context) {
-              return WorkoutScreen(
+              return WorkoutDetailsScreen(
                 workout: workout,
               );
             },
@@ -70,6 +70,11 @@ class MagicFitnessApp extends StatelessWidget {
             },
           );
         }
+        return MaterialPageRoute(
+          builder: (context) {
+            return MagicFitnessApp(workoutsDatasource: workoutsDatasource);
+          },
+        );
       },
     );
   }
