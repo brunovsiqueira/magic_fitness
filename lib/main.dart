@@ -38,12 +38,38 @@ class MagicFitnessApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: AppRoutes.workouts,
-      routes: {
-        AppRoutes.workouts: (context) => WorkoutListScreen(
-              workoutsDatasource: workoutsDatasource,
-            ),
-        AppRoutes.workoutDetails: (context) => WorkoutScreen(),
-        AppRoutes.addSet: (context) => const AddSetScreen(),
+      onGenerateRoute: (settings) {
+        if (settings.name == AppRoutes.workouts) {
+          return MaterialPageRoute(
+            builder: (context) {
+              return WorkoutListScreen(
+                workoutsDatasource: workoutsDatasource,
+              );
+            },
+          );
+        }
+        if (settings.name == AppRoutes.workoutDetails) {
+          final WorkoutModel workout =
+              ModalRoute.of(context)?.settings.arguments as WorkoutModel? ??
+                  WorkoutModel(
+                    date: DateTime.now().toUtc(),
+                    setList: [],
+                  );
+          return MaterialPageRoute(
+            builder: (context) {
+              return WorkoutScreen(
+                workout: workout,
+              );
+            },
+          );
+        }
+        if (settings.name == AppRoutes.addSet) {
+          return MaterialPageRoute(
+            builder: (context) {
+              return const AddSetScreen();
+            },
+          );
+        }
       },
     );
   }

@@ -6,27 +6,18 @@ import 'package:magic_fitness/src/models/workout_model.dart';
 import 'package:magic_fitness/src/routes.dart';
 
 class WorkoutScreen extends StatefulWidget {
-  WorkoutScreen({super.key});
+  final WorkoutModel workout;
+
+  WorkoutScreen({super.key, required this.workout});
 
   @override
   State<WorkoutScreen> createState() => _WorkoutScreenState();
 }
 
 class _WorkoutScreenState extends State<WorkoutScreen> {
-  late final WorkoutModel workout;
-
-  @override
-  void didChangeDependencies() {
-    workout = ModalRoute.of(context)!.settings.arguments as WorkoutModel? ??
-        WorkoutModel(
-          date: DateTime.now().toUtc(),
-          setList: [],
-        );
-    super.didChangeDependencies();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final WorkoutModel workout = widget.workout;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Current Workout'),
