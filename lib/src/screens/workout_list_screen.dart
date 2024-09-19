@@ -22,26 +22,32 @@ class WorkoutListScreen extends HookWidget {
         itemCount: workoutsData.workouts.length,
         itemBuilder: (context, index) {
           final workout = workoutsData.workouts[index];
-          return ListTile(
-            title: Text(workout.date.toString()),
-            onTap: () async {
-              final updatedWorkout = await Navigator.pushNamed(
-                context,
-                AppRoutes.workoutDetails,
-                arguments: workout,
-              ) as WorkoutModel?;
 
-              if (updatedWorkout != null) {
-                // Update the workout in the local list without refetching
-                workoutsData.updateWorkoutInList(updatedWorkout);
+          return Card(
+            margin: EdgeInsets.only(bottom: 16),
+            child: ListTile(
+              title: Text('Workout ${index + 1}'),
+              subtitle: Text('${workout.setList.length + 1} sets'),
+              trailing: Icon(Icons.bar_chart, color: Colors.blue),
+              onTap: () async {
+                final updatedWorkout = await Navigator.pushNamed(
+                  context,
+                  AppRoutes.workoutDetails,
+                  arguments: workout,
+                ) as WorkoutModel?;
 
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Workout updated!')),
-                  );
+                if (updatedWorkout != null) {
+                  // Update the workout in the local list without refetching
+                  workoutsData.updateWorkoutInList(updatedWorkout);
+
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Workout updated!')),
+                    );
+                  }
                 }
-              }
-            },
+              },
+            ),
           );
         },
       ),
