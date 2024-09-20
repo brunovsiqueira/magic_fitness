@@ -7,7 +7,7 @@ part 'workout_model.g.dart';
 class WorkoutModel {
   final Id id = Isar.autoIncrement;
   final DateTime date;
-  final List<SetModel> setList;
+  List<SetModel> setList;
 
   WorkoutModel({
     required this.date,

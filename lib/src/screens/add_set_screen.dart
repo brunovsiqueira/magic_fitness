@@ -97,25 +97,28 @@ class _AddSetScreenState extends State<AddSetScreen> {
                 textInputAction: TextInputAction.done,
                 validator: ValidationHelpers.validatePositiveInteger,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
+                onFieldSubmitted: (_) {
+                  formSubmitted();
+                },
               ),
               const Spacer(),
-              AddSetButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    final newSet = SetModel(
-                      exercise: _selectedExercise!,
-                      weight: double.parse(_weightController.text),
-                      repetitions: int.parse(_repetitionsController.text),
-                    );
-
-                    Navigator.pop(context, newSet);
-                  }
-                },
-              )
+              AddSetButton(onPressed: formSubmitted)
             ],
           ),
         ),
       ),
     );
+  }
+
+  void formSubmitted() {
+    if (_formKey.currentState!.validate()) {
+      final newSet = SetModel(
+        exercise: _selectedExercise!,
+        weight: double.parse(_weightController.text),
+        repetitions: int.parse(_repetitionsController.text),
+      );
+
+      Navigator.pop(context, newSet);
+    }
   }
 }

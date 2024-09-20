@@ -18,7 +18,7 @@ class WorkoutDetailsScreen extends StatefulWidget {
 class _WorkoutDetailsScreenState extends State<WorkoutDetailsScreen> {
   @override
   Widget build(BuildContext context) {
-    final WorkoutModel workout = widget.workout;
+    WorkoutModel workout = widget.workout;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Current Workout'),
@@ -49,7 +49,7 @@ class _WorkoutDetailsScreenState extends State<WorkoutDetailsScreen> {
                         as SetModel?;
                 if (newSet != null) {
                   setState(() {
-                    workout.setList.add(newSet);
+                    workout.setList = List.from(workout.setList)..add(newSet);
                   });
                 }
               },
