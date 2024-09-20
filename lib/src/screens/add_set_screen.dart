@@ -45,6 +45,7 @@ class _AddSetScreenState extends State<AddSetScreen> {
               const Text('Exercise',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               DropdownButtonFormField<Exercise>(
+                key: const Key('exercise_dropdown'),
                 value: _selectedExercise,
                 items: Exercise.values.map((exercise) {
                   return DropdownMenuItem<Exercise>(
@@ -73,6 +74,7 @@ class _AddSetScreenState extends State<AddSetScreen> {
               const Text('Weight (kg)',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               TextFormField(
+                key: const Key('weight_field'),
                 controller: _weightController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
@@ -88,6 +90,7 @@ class _AddSetScreenState extends State<AddSetScreen> {
               const Text('Repetitions',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               TextFormField(
+                key: const Key('reps_field'),
                 controller: _repetitionsController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
