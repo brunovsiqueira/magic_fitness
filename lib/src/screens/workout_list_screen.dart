@@ -27,7 +27,7 @@ class WorkoutListScreen extends HookWidget {
             margin: const EdgeInsets.only(bottom: 16),
             child: ListTile(
               title: Text('Workout ${index + 1}'),
-              subtitle: Text('${workout.setList.length + 1} sets'),
+              subtitle: Text('${workout.setList.length} sets'),
               trailing: const Icon(Icons.bar_chart, color: Colors.blue),
               onTap: () async {
                 final updatedWorkout = await Navigator.pushNamed(
