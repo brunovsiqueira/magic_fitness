@@ -33,7 +33,12 @@ class WorkoutListScreen extends StatelessWidget {
                     child: ListTile(
                       title: Text('Workout ${index + 1}'),
                       subtitle: Text('${workout.setList.length} sets'),
-                      trailing: const Icon(Icons.bar_chart, color: Colors.blue),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                        onPressed: () {
+                          _confirmDelete(context, workout.id);
+                        },
+                      ),
                       onTap: () async {
                         final updatedWorkout = await Navigator.pushNamed(
                           context,
@@ -81,6 +86,40 @@ class WorkoutListScreen extends StatelessWidget {
   void _showUpdatedFeedback(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Workout updated!')),
+    );
+  }
+
+  void _confirmDelete(BuildContext context, int workoutId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Workout'),
+          content: const Text('Are you sure you want to delete this workout?'),
+          actions: [
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: const Text('Delete', style: TextStyle(color: Colors.red)),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                context.read<WorkoutsCubit>().deleteWorkout(workoutId);
+                _showDeletedFeedback(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showDeletedFeedback(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Workout deleted!')),
     );
   }
 }
