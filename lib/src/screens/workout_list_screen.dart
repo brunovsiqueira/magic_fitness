@@ -18,38 +18,41 @@ class WorkoutListScreen extends HookWidget {
       appBar: AppBar(
         title: const Text('Workout List'),
       ),
-      body: ListView.builder(
-        itemCount: workoutsData.workouts.length,
-        itemBuilder: (context, index) {
-          final workout = workoutsData.workouts[index];
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView.builder(
+          itemCount: workoutsData.workouts.length,
+          itemBuilder: (context, index) {
+            final workout = workoutsData.workouts[index];
 
-          return Card(
-            margin: const EdgeInsets.only(bottom: 16),
-            child: ListTile(
-              title: Text('Workout ${index + 1}'),
-              subtitle: Text('${workout.setList.length} sets'),
-              trailing: const Icon(Icons.bar_chart, color: Colors.blue),
-              onTap: () async {
-                final updatedWorkout = await Navigator.pushNamed(
-                  context,
-                  AppRoutes.workoutDetails,
-                  arguments: workout,
-                ) as WorkoutModel?;
+            return Card(
+              margin: const EdgeInsets.only(bottom: 16),
+              child: ListTile(
+                title: Text('Workout ${index + 1}'),
+                subtitle: Text('${workout.setList.length} sets'),
+                trailing: const Icon(Icons.bar_chart, color: Colors.blue),
+                onTap: () async {
+                  final updatedWorkout = await Navigator.pushNamed(
+                    context,
+                    AppRoutes.workoutDetails,
+                    arguments: workout,
+                  ) as WorkoutModel?;
 
-                if (updatedWorkout != null) {
-                  // Update the workout in the local list without refetching
-                  workoutsData.updateWorkoutInList(updatedWorkout);
+                  if (updatedWorkout != null) {
+                    // Update the workout in the local list without refetching
+                    workoutsData.updateWorkoutInList(updatedWorkout);
 
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Workout updated!')),
-                    );
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Workout updated!')),
+                      );
+                    }
                   }
-                }
-              },
-            ),
-          );
-        },
+                },
+              ),
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {

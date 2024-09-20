@@ -48,7 +48,9 @@ class _WorkoutDetailsScreenState extends State<WorkoutDetailsScreen> {
                     await Navigator.pushNamed(context, AppRoutes.addSet)
                         as SetModel?;
                 if (newSet != null) {
-                  workout.setList.add(newSet);
+                  setState(() {
+                    workout.setList.add(newSet);
+                  });
                 }
               },
             ),

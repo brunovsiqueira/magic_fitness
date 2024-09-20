@@ -49,12 +49,11 @@ class MagicFitnessApp extends StatelessWidget {
           );
         }
         if (settings.name == AppRoutes.workoutDetails) {
-          final WorkoutModel workout =
-              ModalRoute.of(context)?.settings.arguments as WorkoutModel? ??
-                  WorkoutModel(
-                    date: DateTime.now().toUtc(),
-                    setList: [],
-                  );
+          final WorkoutModel workout = settings.arguments as WorkoutModel? ??
+              WorkoutModel(
+                date: DateTime.now().toUtc(),
+                setList: [],
+              );
           return MaterialPageRoute(
             builder: (context) {
               return WorkoutDetailsScreen(
