@@ -91,6 +91,7 @@ WorkoutModel _workoutModelDeserialize(
         ) ??
         [],
   );
+  object.id = id;
   return object;
 }
 
@@ -125,7 +126,9 @@ List<IsarLinkBase<dynamic>> _workoutModelGetLinks(WorkoutModel object) {
 }
 
 void _workoutModelAttach(
-    IsarCollection<dynamic> col, Id id, WorkoutModel object) {}
+    IsarCollection<dynamic> col, Id id, WorkoutModel object) {
+  object.id = id;
+}
 
 extension WorkoutModelQueryWhereSort
     on QueryBuilder<WorkoutModel, WorkoutModel, QWhere> {

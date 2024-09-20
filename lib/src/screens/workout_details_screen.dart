@@ -7,7 +7,7 @@ import 'package:magic_fitness/src/routes.dart';
 import 'package:magic_fitness/src/widgets/add_set_button.dart';
 
 class WorkoutDetailsScreen extends StatefulWidget {
-  final WorkoutModel workout;
+  final WorkoutModel? workout;
 
   WorkoutDetailsScreen({super.key, required this.workout});
 
@@ -16,9 +16,18 @@ class WorkoutDetailsScreen extends StatefulWidget {
 }
 
 class _WorkoutDetailsScreenState extends State<WorkoutDetailsScreen> {
+  late final WorkoutModel workout;
+
+  @override
+  void initState() {
+    super.initState();
+
+    workout = widget.workout ??
+        WorkoutModel(date: DateTime.now().toUtc(), setList: []);
+  }
+
   @override
   Widget build(BuildContext context) {
-    WorkoutModel workout = widget.workout;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Current Workout'),

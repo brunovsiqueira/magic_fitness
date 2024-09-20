@@ -8,7 +8,7 @@ class WorkoutsDatasourceImpl implements WorkoutsDatasource {
   WorkoutsDatasourceImpl(this.isar);
 
   @override
-  Future<void> addWorkout(WorkoutModel workout) async {
+  Future<void> upsertWorkout(WorkoutModel workout) async {
     await isar.writeTxn(() async {
       await isar.workoutModels.put(workout);
     });
@@ -22,13 +22,6 @@ class WorkoutsDatasourceImpl implements WorkoutsDatasource {
   @override
   Future<WorkoutModel?> getWorkoutById(int id) async {
     return await isar.workoutModels.get(id);
-  }
-
-  @override
-  Future<void> updateWorkout(WorkoutModel workout) async {
-    await isar.writeTxn(() async {
-      await isar.workoutModels.put(workout);
-    });
   }
 
   @override

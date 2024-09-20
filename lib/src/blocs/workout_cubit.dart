@@ -13,15 +13,31 @@ class WorkoutsCubit extends Cubit<WorkoutsState> {
     emit(WorkoutsLoaded(workouts));
   }
 
-  void updateWorkoutInList(WorkoutModel updatedWorkout) async {
+  void upsertWorkout(WorkoutModel workout) async {
     if (state is WorkoutsLoaded) {
       final currentState = state as WorkoutsLoaded;
-      final updatedList = currentState.workouts
-          .map((workout) =>
-              workout.id == updatedWorkout.id ? updatedWorkout : workout)
-          .toList();
 
-      await workoutsDatasource.updateWorkout(updatedWorkout);
+      await workoutsDatasource.upsertWorkout(workout);
+
+      // Remove any existing workout with the same id and add the new/updated workout
+      List<WorkoutModel> updatedList = currentState.workouts
+          .where((w) => w.id != workout.id)
+          .toList()
+        ..add(workout);
+
+      emit(WorkoutsLoaded(updatedList));
+    }
+  }
+
+  void deleteWorkout(int id) async {
+    if (state is WorkoutsLoaded) {
+      final currentState = state as WorkoutsLoaded;
+
+      await workoutsDatasource.deleteWorkout(id);
+
+      final updatedList =
+          currentState.workouts.where((workout) => workout.id != id).toList();
+
       emit(WorkoutsLoaded(updatedList));
     }
   }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:isar/isar.dart';
+import 'package:magic_fitness/src/blocs/workout_cubit.dart';
 import 'package:magic_fitness/src/datasources/workout_datasource.dart';
 import 'package:magic_fitness/src/datasources/workouts_datasource_impl.dart';
 import 'package:magic_fitness/src/models/workout_model.dart';
@@ -32,49 +34,27 @@ class MagicFitnessApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      initialRoute: AppRoutes.workouts,
-      onGenerateRoute: (settings) {
-        if (settings.name == AppRoutes.workouts) {
-          return MaterialPageRoute(
-            builder: (context) {
-              return WorkoutListScreen(
+    return BlocProvider(
+      create: (_) => WorkoutsCubit(workoutsDatasource)..fetchWorkouts(),
+      child: MaterialApp(
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        initialRoute: AppRoutes.workouts,
+        routes: {
+          AppRoutes.workouts: (context) => WorkoutListScreen(
                 workoutsDatasource: workoutsDatasource,
-              );
-            },
-          );
-        }
-        if (settings.name == AppRoutes.workoutDetails) {
-          final WorkoutModel workout = settings.arguments as WorkoutModel? ??
-              WorkoutModel(
-                date: DateTime.now().toUtc(),
-                setList: [],
-              );
-          return MaterialPageRoute(
-            builder: (context) {
-              return WorkoutDetailsScreen(
-                workout: workout,
-              );
-            },
-          );
-        }
-        if (settings.name == AppRoutes.addSet) {
-          return MaterialPageRoute(
-            builder: (context) {
-              return const AddSetScreen();
-            },
-          );
-        }
-        return MaterialPageRoute(
-          builder: (context) {
-            return MagicFitnessApp(workoutsDatasource: workoutsDatasource);
+              ),
+          AppRoutes.workoutDetails: (context) {
+            WorkoutModel? workout =
+                ModalRoute.of(context)!.settings.arguments as WorkoutModel?;
+
+            return WorkoutDetailsScreen(workout: workout);
           },
-        );
-      },
+          AppRoutes.addSet: (context) => const AddSetScreen(),
+        },
+      ),
     );
   }
 }
