@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:magic_fitness/src/helpers/input_formatters.dart';
 import 'package:magic_fitness/src/helpers/validator_helpers.dart';
 import 'package:magic_fitness/src/models/set_model.dart';
 import 'package:magic_fitness/src/widgets/add_set_button.dart';
@@ -78,6 +79,7 @@ class _AddSetScreenState extends State<AddSetScreen> {
                   border: OutlineInputBorder(),
                   hintText: 'Enter weight',
                 ),
+                inputFormatters: [InputFormatters.twoDecimalPlacesFormatter],
                 textInputAction: TextInputAction.next,
                 validator: ValidationHelpers.validatePositiveDouble,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -97,24 +99,6 @@ class _AddSetScreenState extends State<AddSetScreen> {
                 autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
               const Spacer(),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    final newSet = SetModel(
-                      exercise: _selectedExercise!,
-                      weight: double.parse(_weightController.text),
-                      repetitions: int.parse(_repetitionsController.text),
-                    );
-
-                    Navigator.pop(context, newSet);
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  minimumSize: const Size(double.infinity, 50),
-                ),
-                child: const Text('Add Set'),
-              ),
               AddSetButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
